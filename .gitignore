@@ -1,0 +1,8 @@
+.idea/libraries
+.idea/dataSources
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/workspace.xml
+src/test
+out/
+target
