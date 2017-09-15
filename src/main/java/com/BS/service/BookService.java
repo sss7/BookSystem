@@ -2,7 +2,9 @@ package com.BS.service;
 
 import com.BS.dao.BooksDao;
 import com.BS.entity.Book;
+import com.BS.entity.BookStore;
 import com.BS.entity.TextRes;
+import com.BS.util.HibernateSingleton;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,10 +16,14 @@ import org.springframework.stereotype.Service;
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookService {
 
+    public static SessionFactory sessionFactory = HibernateSingleton.getInstance();
+    public static Session session;
+    public static Transaction transaction;
 
     @Autowired
     private BooksDao booksDao;
@@ -32,7 +38,12 @@ public class BookService {
         return textRes.message();
     }
 
-    public Book textMessageGetFirst(int id) {
+    public List getAllBooks() {
+        return booksDao.getAllBooks();
+    }
+
+
+    public Book getBookById(int id) {
         for (Book book : booksDao.getAllBooks()) {
             if (book.getId() == id) {
                 return book;
@@ -42,11 +53,43 @@ public class BookService {
         return null; //booksDao.getAllBooks().get(id);
     }
 
-    public List getAllBooks() {
-        return booksDao.getAllBooks();
+
+    public Book getBookById_(int id) {
+//        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+//        SessionFactory sessionFactory = HibernateSingleton.getInstance();
+//        sessionFactory = HibernateSingleton.getInstance();
+
+
+//        Session session = sessionFactory.openSession();
+        session = sessionFactory.openSession();
+
+//        Transaction transaction = session.beginTransaction();
+        transaction = session.beginTransaction();
+
+//        BookStore bookStore = session.get(BookStore.class, id);
+//        System.out.println(bookStore);
+//        List<Book> books = bookStore.getBooks();
+//        for (Book book : books) {System.out.println(book);}
+
+        Book book = session.get(Book.class, id);
+
+//        System.out.println(book);
+//        book.getBookStore().setBooks(null);
+//        System.out.println(book);
+
+
+//        Query query = session.createQuery("from BookStore");
+//        List<BookStore> bookStores = query.getResultList();
+
+//        transaction.commit();
+
+//        session.close();
+//        sessionFactory.close();
+
+
+//        return booksDao.getAllBooks();
+        return book;
     }
-
-
 
 
 //    @Autowired

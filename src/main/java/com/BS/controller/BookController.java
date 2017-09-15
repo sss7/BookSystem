@@ -1,6 +1,7 @@
 package com.BS.controller;
 
 import com.BS.entity.Book;
+import com.BS.entity.BookStore;
 import com.BS.service.BookService;
 //import org.hibernate.query.Query;
 //import org.hibernate.Query;
@@ -31,7 +32,7 @@ public class BookController {
     }
 
 
-    @RequestMapping(path = "/book", method = RequestMethod.GET) //produces = "text/plain"
+    @RequestMapping(value = "/book", method = RequestMethod.GET) //produces = "text/plain"
     public String textMessage() {
         return bookService.textMessage();
     }
@@ -43,11 +44,26 @@ public class BookController {
 //    }
 
     @RequestMapping(value = "/book/get/{id}", method = RequestMethod.GET) //produces = "text/plain"
-    public Book textMessageGetFirst(@PathVariable int id) {
-        return bookService.textMessageGetFirst(id);
+    public Book getBookById(@PathVariable int id) {
+        return bookService.getBookById(id);
     }
 
-    @RequestMapping(path = "/book/list", method = RequestMethod.GET) //produces = "text/plain"
+    @RequestMapping(value = "/book/get_/{id}", method = RequestMethod.GET) //produces = "text/plain"
+    public Book getBookById_(@PathVariable int id) {
+        Book book = bookService.getBookById_(id);
+
+//        System.out.println(">>>>>>>>>>>>>>>" + book);
+//        book.getBookStore().setBooks(null);
+//        System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+//        System.out.println(">>>>>>>>>>>>>>>" + book);
+
+//        /*BookService.sessionFactory.close();*/
+        BookService.transaction.commit();
+        BookService.session.close();
+        return bookService.getBookById_(id);
+    }
+
+    @RequestMapping(value = "/book/list", method = RequestMethod.GET) //produces = "text/plain"
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }

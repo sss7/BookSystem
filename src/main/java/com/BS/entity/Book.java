@@ -3,20 +3,20 @@ package com.BS.entity;
 import javax.persistence.*;
 
 
-@NamedQueries({
-        @NamedQuery(
-            name = "getBookById",
-            query = "from books b where b.id = :id"
-        )
-})
+//@NamedQueries({
+//        @NamedQuery(
+//            name = "getBookById",
+//            query = "from books b where b.id = :id"
+//        )
+//})
 
 @Entity
-@Table//(name = "books")
+@Table(name = "books")
 public class Book {
     @Id
-//    @Column(name = "ID")
+    @Column(name = "ID")
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //
     private int id;
 
     @Column(name = "BOOK_TITLE")
@@ -25,8 +25,16 @@ public class Book {
     @Column(name = "BOOK_AUTHOR")
     private String BookAuthor;
 
-    @Column(name = "BOOK_Price")
+    @Column(name = "BOOK_PRICE")
     private int BookPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookstore_id")
+    private BookStore bookStore;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
 
     public Book() {
     }
@@ -42,6 +50,14 @@ public class Book {
         BookName = bookName;
         BookAuthor = bookAuthor;
         BookPrice = bokPrice;
+    }
+
+    public Book(String bookName, String bookAuthor, int bookPrice, BookStore bookStore, Publisher publisher) {
+        BookName = bookName;
+        BookAuthor = bookAuthor;
+        BookPrice = bookPrice;
+        this.bookStore = bookStore;
+        this.publisher = publisher;
     }
 
     public int getId() {
@@ -68,12 +84,28 @@ public class Book {
         BookAuthor = bookAuthor;
     }
 
-    public int getBokPrice() {
+    public int getBookPrice() {
         return BookPrice;
     }
 
-    public void setBokPrice(int bokPrice) {
-        BookPrice = bokPrice;
+    public void setBookPrice(int bookPrice) {
+        BookPrice = bookPrice;
+    }
+
+    public BookStore getBookStore() {
+        return bookStore;
+    }
+
+    public void setBookStore(BookStore bookStore) {
+        this.bookStore = bookStore;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     @Override
@@ -82,7 +114,9 @@ public class Book {
                 "id=" + id +
                 ", BookName='" + BookName + '\'' +
                 ", BookAuthor='" + BookAuthor + '\'' +
-                ", BokPrice=" + BookPrice +
+                ", BookPrice=" + BookPrice +
+                ", bookStore=" + bookStore +
+                ", publisher=" + publisher +
                 '}';
     }
 }
